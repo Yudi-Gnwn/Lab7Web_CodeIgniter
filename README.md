@@ -150,3 +150,25 @@
 
 
 # Praktikum 3
+
+- Membuat layout utama
+- buat folder ```layout``` di dalam ```app/Views```
+- kemudian buat file baru dengan nama ```main.php```, msukan code berikut:
+
+  ![3 1](https://github.com/user-attachments/assets/1fc28d85-4b44-4724-8136-454388639492)
+
+- ubah ```app/Views/home.php``` agar sesuai dengan layout baru, kemudian sesuaikan untuk halaman lainnya
+  dengan menggunakan format layout yang baru
+
+  ![3 2](https://github.com/user-attachments/assets/7a82bd15-5cf0-4eb8-9772-a27618d9f5f3)
+
+- kemudian didalam ```app/``` buat folder ```Cells```
+- setelah itu buat file ```ArtikelTerkini.php``` didalam ```app/Cells``` dengan code:
+
+  ![3 3](https://github.com/user-attachments/assets/e9b35190-c3f9-4edf-8b0d-2f39139fe783)
+
+- masih didalam folder ```Views```, buat folder ```components```
+- kemudian buat file ```artikel_rekini.php``` didalam folder```components```
+- tambahkan code berikut:
+
+  ![3 4](https://github.com/user-attachments/assets/5af98353-023e-458c-80f1-03dc179726f8)
