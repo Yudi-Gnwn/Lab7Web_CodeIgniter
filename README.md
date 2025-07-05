@@ -1,10 +1,5 @@
-# Tugas Praktikum Web
+# Tugas Praktikum Web 1-11 - CodeIgniter
 
-# Tugas Praktikum Pemrograman Web 2
-```
-Yudi Gunawan
-312310179
-```
 # Praktikum 1
 - download codeigniter dari website, kemudian ekstrak file ke direktori baru
   htdocs/lab11_ci, kemudian ubah nama file menjadi ci4
