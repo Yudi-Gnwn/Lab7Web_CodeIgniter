@@ -207,4 +207,136 @@
 
 # Praktikum 4
 
-- 
+- Siapkan database server, nyalakan ```Mysql``` di Xampp 
+- Pertama, buat tabel user login
+  ```
+  CREATE TABLE user (
+    id INT(11) auto_increment,
+    username VARCHAR(200) NOT NULL,
+    useremail VARCHAR(200),
+    userpassword VARCHAR(200),
+    PRIMARY KEY(id)
+  );
+  ```
+
+- Kemudian membuat script untuk memproses data Login
+- Buat file baru pada ```app/Models``` dengan nama ```UserModel.php```, lalu tambahkan code berikut:
+
+  ```
+  <?php
+
+  namespace App\Models;
+  
+  use CodeIgniter\Model;
+  
+  class UserModel extends Model
+  {
+      protected $table = 'user';
+      protected $primaryKey = 'id';
+  
+      protected $useAutoIncrement = true;
+      protected $allowedFields = ['username', 'useremail', 'userpassword'];
+  }
+  ```
+
+- Pada direktori ```app/Controllers``` buat controller baru dengan nama ```User.php```
+- menambahkan method ```index()``` dan ```login()```.
+
+  ![Screenshot 2025-07-06 105929](https://github.com/user-attachments/assets/49e4c4de-5e6b-4a62-9b3c-850732ab9132)
+
+- Membuat View Login
+- pada direktori ```app/Views```, buat direktori baru dengan nama ```user``` kemudian isikan dengan file ```login.php```
+- masukan code berikut:
+
+  ```
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <title>Login</title>
+      <link rel="stylesheet" href="<?= base_url('/style.css');?>">
+  </head>
+  <body>
+      <div id="login-wrapper">
+              <h1>Sign In</h1>
+              <?php if(session()->getFlashdata('flash_msg')):?>
+                  <div class="alert alert-danger"><?= session()
+  >getFlashdata('flash_msg') ?></div>
+              <?php endif;?>
+              <form action="" method="post">
+                  <div class="mb-3">
+                      <label for="InputForEmail" class="form-label">Email
+  address</label>
+                      <input type="email" name="email" class="form-control"
+  id="InputForEmail" value="<?= set_value('email') ?>">
+                  </div>
+                  <div class="mb-3">
+                      <label for="InputForPassword" class="form
+  label">Password</label>
+                      <input type="password" name="password" class="form
+  control" id="InputForPassword">
+                  </div>
+                  <button type="submit" class="btn btn-
+  primary">Login</button>
+              </form>
+      </div>
+  </body>
+  </html>
+  ```
+
+- Membuat Database Seeder
+- Database seeder berfungsi untuk membuat data dummy. Untuk keperluan ujicoba modul login,<br>
+  kita perlu memasukkan data user dan password kedalam database. Untuk itu buat database seeder untuk tabel user.<br>
+  ```
+  php spark make:seeder UserSeeder
+  ```
+
+- Selanjutnya, buka file ```UserSeeder.php``` yang berada di ```app/Database/Seeds/UserSeeder.php```<br>
+  kemudian isi dengan kode berikut:
+
+  ![Screenshot 2025-07-06 110811](https://github.com/user-attachments/assets/6c08a534-843c-474e-b901-e28820d73544)
+
+- selanjutnya buka cmd lalu lakukan perintah berikut:
+  ```
+  php spark db:seed UserSeeder
+  ```
+
+### Uji coba login
+- buka url ```http://localhost:8080/user/login```
+
+  ![4 6](https://github.com/user-attachments/assets/cd163c53-f144-41db-9450-2a5dd15dab57)
+
+- selanjutnya buat filter untuk halama admin
+- pada direktori ```app/Filters``` buat file baru ```Auth.php``` kemudian masukan code:
+
+  ![Screenshot 2025-07-06 112946](https://github.com/user-attachments/assets/739899c0-d673-433b-af6c-d04f52810fa7)
+
+- Selanjutnya buka ```app/Config/Filters.php``` tambahkan kode berikut:
+  ```
+  'auth' => Auth::class,
+  ```
+
+  ![Screenshot 2025-07-06 113354](https://github.com/user-attachments/assets/6764fefc-40cb-4242-af23-e8d3fb62e4a9)
+
+- Kemudian buka ```app/Config/Routes.php``` dan sesuaikan kodenya
+
+  ![Screenshot 2025-07-06 113912](https://github.com/user-attachments/assets/783f266b-7104-42fb-9b2b-0c3db9321430)
+
+### Akses menu admin
+- Buka url ```http://localhost:8080/admin/artikel``` ketika alamat tersebut diakses, maka muncul halaman login.
+- kemudian masuk sebagai Admin, jika berhasil akan muncul seperti:
+
+  ![4 8'2](https://github.com/user-attachments/assets/7f63f0e4-939f-4384-877a-a44a4b25b518)
+
+- Terakhir, kita bisa membuat method ```logout``` pada ```Controller User``` dengan code:
+  ```
+   public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('/user/login');
+    }
+  ```
+
+## Praktikum 5
+  
+  
