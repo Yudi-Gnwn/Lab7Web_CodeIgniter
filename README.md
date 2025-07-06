@@ -172,3 +172,39 @@
 - tambahkan code berikut:
 
   ![3 4](https://github.com/user-attachments/assets/5af98353-023e-458c-80f1-03dc179726f8)
+
+## Praktikum3_Tugas 3
+1. Sesuaikan data dengan praktikum sebelumnya, perlu melakukan perubahan ```field``` pada database
+  dengan menambahkan tanggal agar dapat mengambil data artikel terbaru.
+
+
+- kita perlu menambahkan field ```created_at``` pada tabel ```artikel``` untuk mangambil artikel terbaru
+  ```
+  ALTER TABLE artikel ADD created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
+  ```
+
+  ![3 5 1](https://github.com/user-attachments/assets/f25dd14e-3121-4c6f-b6c8-8e96a5c3cb50)
+
+  field ```created_at``` digunakan untuk menampilkan artikel terbaru menggunakan ```View cell```
+
+  ```
+  SELECT id, judul, created_at FROM artikel ORDER BY created_at DESC LIMIT 5;
+  ```
+  
+  ![3 5 3](https://github.com/user-attachments/assets/79d493e6-1eab-40a9-a051-447451100450)
+
+3. Apa manfaat utama dari penggunaan View Layout dalam pengembangan aplikasi?<br>
+   - Struktur layout cukup ditulis sekali, Halaman hanya fokus pada konten dan
+     mempermudah maintain juga pengembangan desain antarmuka.
+
+4. Jelaskan perbedaan antara ```View Cell``` dan ```View``` biasa<br>
+   - ```View```, dipakai untuk halaman utama, seperti home.php dan artikel.php.<br>
+     (Kita perlu mengirim data dari controller ke view)<br>
+   - ```View Cell```, seperti komponen kecil dan mandiri, mirip seperti widget atau partial.<br>
+     biasanya untuk membuat sidebar atau Menu navigasi kecil<br>
+     (Komponen yang bisa dipakai ulang di banyak halaman)
+
+
+# Praktikum 4
+
+- 
