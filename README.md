@@ -342,6 +342,7 @@
 - Membuat Pagination
 - fungsi pagination sudah tersedia pada Library untuk ci4
 - buka ```Controller Artikel```, kemudian ubah code pada method ```admin_index``` menjadi code berikut:
+  
   ```
   public function admin_index()
     {
@@ -356,6 +357,7 @@
     }
   ```
 - Kemudian buka ```view/artikel/admin_index.php```, lalu tambahkan code berikut dibawah deklarasi tabel data
+  
   ```
   <?= $pager->links(); ?>
   ```
@@ -364,6 +366,7 @@
   ![5 1](https://github.com/user-attachments/assets/608dd559-f627-45db-9d39-a57d3bc7717b)
 
 - Untuk membuat filtering artikel, buka ```Controller Artikel``` pada method ```admin_index```, ubah code menjadi:
+  
   ```
    public function admin_index()
     {
@@ -380,6 +383,7 @@
     }
   ```
 - pada ```view/artikel/admin_index.php``` tambahkan form pencarian sebelum deklarasi tabel:
+  
   ```
   <form method="get" class="form-search">
     <input type="text" name="q" value="<?= $q; ?>" placeholder="Cari data">
@@ -387,6 +391,7 @@
   </form>
   ```
 - pada link pager ubah:
+  
   ```
   <?= $pager->only(['q'])->links(); ?>
   ```
@@ -398,6 +403,7 @@
 
 - Membuat fungsi untuk menambahkan Gambar
 - buka ```Controller Artikel```, kemudian sesuaikan code pada method ```add```:
+  
   ```
     public function add()
     {
@@ -425,12 +431,14 @@
     }
   ```
 - Selanjutnya pada ```view/artikel/form_add.php``` tambahkan field input:
+  
   ```
    <p>
         <input type="file" name="gambar">
   </p>
   ```
-- kemudian sesuikan tag form dengan menambahkan ```ecrypt type``` seperti berikut
+- kemudian sesuikan tag form dengan menambahkan ```ecrypt type``` seperti berikut:
+  
   ```
   <form action="" method="post" enctype="multipart/form-data">
   ```
@@ -440,6 +448,7 @@
 
 - Membuat tabel kategori
 - buat tabel baru ```kategori``` pada ```database``` dengan:
+  
   ```
   CREATE TABLE kategori (
    id_kategori INT(11) AUTO_INCREMENT,
@@ -449,7 +458,8 @@
   );
   ```
 - Mengubah tabel artikel
-- Tambahkan foreign key pada tabel ```artikel``` untuk membuat relasi dengan tabel ```kategori```.
+- Tambahkan foreign key pada tabel ```artikel``` untuk membuat relasi dengan tabel ```kategori```
+  
   ```
   ALTER TABLE artikel
   ADD COLUMN id_kategori INT(11),
@@ -457,6 +467,7 @@
   FOREIGN KEY (id_kategori) REFERENCES kategori(id_kategori);
   ```
 - Kemudian buat file model pada ```app/Models``` dengan nama ```KategoriModel.php```
+  
   ```
   <?php
 
