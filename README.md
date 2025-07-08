@@ -338,5 +338,144 @@
   ```
 
 ## Praktikum 5
+
+- Membuat Pagination
+- fungsi pagination sudah tersedia pada Library untuk ci4
+- buka ```Controller Artikel```, kemudian ubah code pada method ```admin_index``` menjadi code berikut:
+  ```
+  public function admin_index()
+    {
+        $title = 'Daftar Artikel';
+        $model = new ArtikelModel();
+        $data = [
+            'title'   => $title,
+            'artikel' => $model->paginate(10), #data dibatasi 10 record per halaman
+            'pager'   => $model->pager,
+            ];
+        return view('artikel/admin_index', $data);
+    }
+  ```
+- Kemudian buka ```view/artikel/admin_index.php```, lalu tambahkan code berikut dibawah deklarasi tabel data
+  ```
+  <?= $pager->links(); ?>
+  ```
+- Kemudian cek kembali perubahan pada halaman artikel:
+
+  ![5 1](https://github.com/user-attachments/assets/608dd559-f627-45db-9d39-a57d3bc7717b)
+
+- Untuk membuat filtering artikel, buka ```Controller Artikel``` pada method ```admin_index```, ubah code menjadi:
+  ```
+   public function admin_index()
+    {
+        $title = 'Daftar Artikel';
+        $q = $this->request->getVar('q') ?? '';
+        $model = new ArtikelModel();
+        $data = [
+            'title'   => $title,
+            'q'       => $q,
+            'artikel' => $model->like('judul', $q)->paginate(10),
+            'pager'   => $model->pager,
+        ];
+        return view('artikel/admin_index', $data);
+    }
+  ```
+- pada ```view/artikel/admin_index.php``` tambahkan form pencarian sebelum deklarasi tabel:
+  ```
+  <form method="get" class="form-search">
+    <input type="text" name="q" value="<?= $q; ?>" placeholder="Cari data">
+    <input type="submit" value="Cari" class="btn btn-primary">
+  </form>
+  ```
+- pada link pager ubah:
+  ```
+  <?= $pager->only(['q'])->links(); ?>
+  ```
+
+  ![5 2](https://github.com/user-attachments/assets/581c3f5c-4159-45a5-9d2f-3a985785e245)
+
+
+## Praktikum 6
+
+- Membuat fungsi untuk menambahkan Gambar
+- buka ```Controller Artikel```, kemudian sesuaikan code pada method ```add```:
+  ```
+    public function add()
+    {
+        // validasi data.
+        $validation =  \Config\Services::validation();
+        $validation->setRules(['judul' => 'required']);
+        $isDataValid = $validation->withRequest($this->request)->run();
+
+        if ($isDataValid)
+        {
+            $file = $this->request->getFile('gambar');
+            $file->move(ROOTPATH . 'public/gambar');
+
+            $artikel = new ArtikelModel();
+            $artikel->insert([
+                'judul'  => $this->request->getPost('judul'),
+                'isi'    => $this->request->getPost('isi'),
+                'slug'   => url_title($this->request->getPost('judul')),
+                'gambar' => $file->getName(),
+            ]);
+            return redirect('admin/artikel');
+        }
+        $title = "Tambah Artikel";
+        return view('artikel/form_add', compact('title'));
+    }
+  ```
+- Selanjutnya pada ```view/artikel/form_add.php``` tambahkan field input:
+  ```
+   <p>
+        <input type="file" name="gambar">
+  </p>
+  ```
+- kemudian sesuikan tag form dengan menambahkan ```ecrypt type``` seperti berikut
+  ```
+  <form action="" method="post" enctype="multipart/form-data">
+  ```
+
+
+## Praktikum 7
+
+- Membuat tabel kategori
+- buat tabel baru ```kategori``` pada ```database``` dengan:
+  ```
+  CREATE TABLE kategori (
+   id_kategori INT(11) AUTO_INCREMENT,
+   nama_kategori VARCHAR(100) NOT NULL,
+   slug_kategori VARCHAR(100),
+   PRIMARY KEY (id_kategori)
+  );
+  ```
+- Mengubah tabel artikel
+- Tambahkan foreign key pada tabel ```artikel``` untuk membuat relasi dengan tabel ```kategori```.
+  ```
+  ALTER TABLE artikel
+  ADD COLUMN id_kategori INT(11),
+  ADD CONSTRAINT fk_kategori_artikel
+  FOREIGN KEY (id_kategori) REFERENCES kategori(id_kategori);
+  ```
+- Kemudian buat file model pada ```app/Models``` dengan nama ```KategoriModel.php```
+  ```
+  <?php
+
+  namespace App\Models;
+  
+  use CodeIgniter\Model;
+  
+  class KategoriModel extends Model
+  {
+      protected $table = 'kategori';
+      protected $primaryKey = 'id_kategori';
+      protected $useAutoIncrement = true;
+      protected $allowedFields = [nama_kategori', 'slug_kategori'];
+  }
+  ```
+
+
+
+  
+
   
   
