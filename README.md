@@ -5,7 +5,7 @@
   htdocs/lab11_ci, kemudian ubah nama file menjadi ci4
 - kemudian cek ```http://localhost/lab11_ci/ci4/public```
   
-  ![Screenshot 2025-03-19 112837](https://github.com/user-attachments/assets/5fc81915-ec3a-4c8f-ab46-39f80f405570) !
+  ![Screenshot 2025-03-19 112837](https://github.com/user-attachments/assets/5fc81915-ec3a-4c8f-ab46-39f80f405570)
 
 - buka cmd kemudian masuk ke direktori project
 
@@ -81,7 +81,7 @@
 
 - setelah sudah di setup, kita bisa menambahkan data artikel ke database untuk bisa ditampilkan pada Web
 
-  ![2 8](https://github.com/user-attachments/assets/55183bc0-8f39-4b5f-8831-09d73b571b59)bu
+  ![2 8](https://github.com/user-attachments/assets/55183bc0-8f39-4b5f-8831-09d73b571b59)
 
 - Cek browser untuk melihat perubahan
 
