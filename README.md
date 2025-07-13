@@ -5,7 +5,7 @@
   htdocs/lab11_ci, kemudian ubah nama file menjadi ci4
 - kemudian cek ```http://localhost/lab11_ci/ci4/public```
   
-  ![Screenshot 2025-03-19 112837](https://github.com/user-attachments/assets/5fc81915-ec3a-4c8f-ab46-39f80f405570)
+  ![Screenshot 2025-03-19 112837](https://github.com/user-attachments/assets/5fc81915-ec3a-4c8f-ab46-39f80f405570) !
 
 - buka cmd kemudian masuk ke direktori project
 
