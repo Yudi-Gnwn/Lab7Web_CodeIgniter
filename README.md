@@ -816,6 +816,60 @@
 
 # Praktikum 8
 
-- Menambahkan JQuery
+### Menambahkan JQuery
+- download JQuery pada ```https://jquery.com```, ekstrak ke ```public/assets/js```
+- copy semua script pada ```https://code.jquery.com/jquery-3.6.0.js```
+- Kemudian di dalam ```/js``` buat file ```jquery-3.6.0.min.js```
+- Paste scrip sebelumnya:
+  
+  <img width="1419" height="553" alt="8 1" src="https://github.com/user-attachments/assets/0ce7cd7e-f1f5-4742-9434-41c6523da869" />
+
+- membuat AJAX controller
+- pada direktori ```app/Controllers``` buat controller baru ```AjaxController.php```
+- isikan code berikut:
+  ```
+  <?php
+  
+  namespace App\Controllers;
+  
+  use CodeIgniter\Controller;
+  use App\Models\ArtikelModel;
+  
+  class AjaxController extends Controller
+  {
+  
+      public function index()
+     {
+         $title = 'Daftar Artikel (AJAX)';
+         return view('ajax/index', compact('title'));
+     }
+  
+  
+      public function getData()
+      {
+          $model = new ArtikelModel();
+          $data = $model->select('artikel.*, kategori.nama_kategori')
+                        ->join('kategori', 'kategori.id_kategori = artikel.id_kategori', 'left')
+                        ->findAll();
+  
+          return $this->response->setJSON($data);
+      }
+  
+      public function delete($id)
+      {
+          $model = new ArtikelModel();
+          $model->delete($id);
+  
+          return $this->response->setJSON(['status' => 'OK']);
+      }
+  }
+  ```
+
+- kemudian buat folder baru dengan susunan direktori ```views > ajax > index.php```
+- ```app/Views/ajax/index.php```
+  
+  <img width="1252" height="528" alt="Screenshot 2025-07-15 212939" src="https://github.com/user-attachments/assets/e39a6b55-8245-4f01-8c16-a6d53d50b5d6" />
+
+  
 
   
