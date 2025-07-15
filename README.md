@@ -870,6 +870,340 @@
   
   <img width="1252" height="528" alt="Screenshot 2025-07-15 212939" src="https://github.com/user-attachments/assets/e39a6b55-8245-4f01-8c16-a6d53d50b5d6" />
 
-  
+- tambah routes di ```app/Config/Routes.php```
+  ```
+  $routes->get('ajax', 'AjaxController::index');
+  $routes->get('ajax/getData', 'AjaxController::getData');
+  $routes->delete('ajax/delete/(:num)', 'AjaxController::delete/$1');
+  ```
 
+
+# Praktikum 9
+
+- mengubah Controller Artikel
+- pada ```app/Controllers/Artikel.php``` ubah method ```admin_index()``` untuk mengembalikan data dalam format JSON jika request adalah AJAX
+- ubah ```admin_index()```
+  ```
+  public function admin_index()
+  {
+      $title = 'Daftar Artikel (Admin)';
+      $model = new \App\Models\ArtikelModel();
   
+      $q = $this->request->getVar('q') ?? '';
+      $kategori_id = $this->request->getVar('kategori_id') ?? '';
+      $page = $this->request->getVar('page') ?? 1;
+  
+      $builder = $model->table('artikel')
+          ->select('artikel.*, kategori.nama_kategori')
+          ->join('kategori', 'kategori.id_kategori = artikel.id_kategori');
+  
+      if ($q != '') {
+          $builder->like('artikel.judul', $q);
+      }
+  
+      if ($kategori_id != '') {
+          $builder->where('artikel.id_kategori', $kategori_id);
+      }
+  
+      $artikel = $builder->paginate(10, 'default', $page);
+      $pager = $model->pager;
+  
+      $data = [
+          'title' => $title,
+          'q' => $q,
+          'kategori_id' => $kategori_id,
+          'artikel' => $artikel,
+          'pager' => $pager
+      ];
+  
+      if ($this->request->isAJAX()) {
+          return $this->response->setJSON($data);
+      } else {
+          $kategoriModel = new \App\Models\KategoriModel();
+          $data['kategori'] = $kategoriModel->findAll();
+          return view('artikel/admin_index', $data);
+      }
+  }
+  ```
+
+- mengubah View ```admin_index.php```
+- lakukan:
+    - Hapus kode yang menampilkan tabel artikel dan pagination secara langsung.
+    - Tambahkan elemen untuk menampilkan data artikel dan pagination dari AJAX.
+    - Tambahkan kode jQuery untuk melakukan request AJAX.
+ 
+- ubah ```app/Views/artikel/admin_index.php```
+
+  ```
+  <?= $this->include('template/admin_header'); ?>
+
+  <h2><?= $title; ?></h2>
+  
+  <!-- Toolbar Pencarian dan Tambah -->
+  <div class="container">
+    <div class="toolbar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <form id="search-form" style="display: flex; gap: 10px;">
+        <input type="text" name="q" id="search-box" class="form-control" placeholder="Cari judul artikel" />
+  
+        <select name="kategori_id" id="category-filter" class="form-control">
+          <option value="">Semua Kategori</option>
+          <?php foreach ($kategori as $k): ?>
+            <option value="<?= $k['id_kategori']; ?>" <?= ($kategori_id == $k['id_kategori']) ? 'selected' : ''; ?>>
+              <?= $k['nama_kategori']; ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+  
+        <button type="submit" class="btn btn-primary">Cari</button>
+      </form>
+  
+      <a href="<?= base_url('admin/artikel/add') ?>" class="btn btn-primary">+ Artikel (AJAX)</a>
+    </div>
+  </div>
+  
+  <!-- Loader -->
+  <div id="loading" style="display: none; text-align: center; margin-top: 20px;">
+    <div class="spinner"></div>
+    <p>Mencari artikel...</p>
+  </div>
+  
+  <!-- Tabel Artikel akan dirender di sini -->
+  <div id="article-container"></div>
+  
+  <!-- Pagination akan dirender di sini -->
+  <div id="pagination-container" class="pagination-container" style="margin-top: 20px;"></div>
+  
+  <!-- jQuery -->
+  <script src="<?= base_url('assets/js/jquery-3.6.0.min.js'); ?>"></script>
+  <script>
+    $(document).ready(function () {
+      const articleContainer = $('#article-container');
+      const paginationContainer = $('#pagination-container');
+      const searchForm = $('#search-form');
+      const searchBox = $('#search-box');
+      const categoryFilter = $('#category-filter');
+      const loading = $('#loading');
+  
+      const fetchData = (url, showLoading = false) => {
+        if (showLoading) loading.show();
+  
+        $.ajax({
+          url: url,
+          type: 'GET',
+          dataType: 'json',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          success: function (data) {
+            renderArticles(data.artikel);
+            renderPagination(data.pager, data.q, data.kategori_id);
+            if (showLoading) setTimeout(() => loading.hide(), 800);
+          },
+          error: function () {
+            articleContainer.html('<p style="color:red;">Gagal mengambil data.</p>');
+            loading.hide();
+          }
+        });
+      };
+  
+      const renderArticles = (articles) => {
+        let html = '<table class="table">';
+        html += '<thead><tr><th>ID</th><th>Judul</th><th>Kategori</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
+        if (articles.length > 0) {
+          articles.forEach(article => {
+            html += `
+              <tr>
+                <td>${article.id}</td>
+                <td>
+                  <strong>${article.judul}</strong><br>
+                  <small>${article.isi.substring(0, 50)}...</small>
+                </td>
+                <td>${article.nama_kategori}</td>
+                <td>${article.status}</td>
+                <td>
+                  <a class="btn btn-sm btn-info" href="/admin/artikel/edit/${article.id}">Ubah</a>
+                  <a class="btn btn-sm btn-danger" onclick="return confirm('Yakin menghapus data?');" href="/admin/artikel/delete/${article.id}">Hapus</a>
+                </td>
+              </tr>
+            `;
+          });
+        } else {
+          html += '<tr><td colspan="5">Tidak ada data.</td></tr>';
+        }
+        html += '</tbody></table>';
+        articleContainer.html(html);
+      };
+  
+      const renderPagination = (pager, q, kategori_id) => {
+        if (!pager || !pager.links) return;
+        let html = '<nav><ul class="pagination">';
+        pager.links.forEach(link => {
+          const url = link.url ? `${link.url}&q=${q}&kategori_id=${kategori_id}` : '#';
+          html += `<li class="page-item ${link.active ? 'active' : ''}">
+                      <a class="page-link pagination-link" href="${url}">${link.title}</a>
+                   </li>`;
+        });
+        html += '</ul></nav>';
+        paginationContainer.html(html);
+      };
+  
+      // Saat form cari dikirim
+      searchForm.on('submit', function (e) {
+        e.preventDefault();
+        const q = searchBox.val();
+        const kategori_id = categoryFilter.val();
+        fetchData(`/admin/artikel?q=${q}&kategori_id=${kategori_id}`, true);
+      });
+  
+      // Saat ganti kategori
+      categoryFilter.on('change', function () {
+        searchForm.trigger('submit');
+      });
+  
+      // Handler pagination diklik
+      $(document).on('click', '.pagination-link', function (e) {
+        e.preventDefault();
+        const href = $(this).attr('href');
+        if (href && href !== '#') {
+          fetchData(href, true);
+        }
+      });
+  
+      // Load awal
+      fetchData('/admin/artikel', false);
+    });
+  </script>
+  
+  <?= $this->include('template/admin_footer'); ?>
+  ```
+
+
+# Praktikum 10
+
+- Membuat REST Controller
+- akses direktori ```app/Controller```, buat file baru ```post.php```
+- ini berfungsi untuk menampilkan, menambahkan, mengubah dan menghapus data.
+  ```
+  <?php
+
+  namespace App\Controllers;
+  
+  use CodeIgniter\RESTful\ResourceController;
+  use CodeIgniter\API\ResponseTrait;
+  use App\Models\ArtikelModel;
+  
+  class Post extends ResourceController
+  {
+      use ResponseTrait;
+  
+      // Menampilkan semua data artikel
+      public function index()
+      {
+          $model = new ArtikelModel();
+          $data['artikel'] = $model->orderBy('id', 'DESC')->findAll();
+          return $this->respond($data);
+      }
+  
+      // Menambahkan data baru
+      public function create()
+      {
+          $model = new ArtikelModel();
+          $data = [
+              'judul' => $this->request->getVar('judul'),
+              'isi'   => $this->request->getVar('isi')
+          ];
+          $model->insert($data);
+  
+          return $this->respondCreated([
+              'status' => 201,
+              'messages' => ['success' => 'Data artikel berhasil ditambahkan.']
+          ]);
+      }
+  
+      // Menampilkan 1 data
+      public function show($id = null)
+      {
+          $model = new ArtikelModel();
+          $data = $model->where('id', $id)->first();
+          return $data
+              ? $this->respond($data)
+              : $this->failNotFound('Data tidak ditemukan.');
+      }
+  
+      // Mengupdate data
+      public function update($id = null)
+      {
+          $model = new ArtikelModel();
+          $data = [
+              'judul' => $this->request->getVar('judul'),
+              'isi'   => $this->request->getVar('isi')
+          ];
+          $model->update($id, $data);
+  
+          return $this->respond([
+              'status' => 200,
+              'messages' => ['success' => 'Data artikel berhasil diubah.']
+          ]);
+      }
+  
+      // Menghapus data
+      public function delete($id = null)
+      {
+          $model = new ArtikelModel();
+          $data = $model->where('id', $id)->first();
+  
+          if (!$data) return $this->failNotFound('Data tidak ditemukan.');
+  
+          $model->delete($id);
+  
+          return $this->respondDeleted([
+              'status' => 200,
+              'messages' => ['success' => 'Data artikel berhasil dihapus.']
+          ]);
+      }
+  }
+  ```
+
+- Membuat Routing REST Api
+- masuk ke direktori ```app/Config```  tambahkan script berikut pada ```Routes.php```
+  ```
+  $routes->resource('post');
+  ```
+  Kemudian jalankan perintah:
+  ```
+  php spark routes
+  ```
+
+  <img width="1064" height="908" alt="10 2" src="https://github.com/user-attachments/assets/fa803d2e-0d5d-4b38-92cd-4336316daaba" />
+
+
+- Testing REST Api
+- dowmload/buka ```postman``` kemudian pilih ```create new -> HTTP```
+
+  <img width="1316" height="560" alt="10 3" src="https://github.com/user-attachments/assets/cfda0d52-d7f1-467b-b3e7-a6868bcf1b1e" />
+
+- Menampilkan semua data
+- pilih method GET dan masukan url ```http://localhost:8080/post```
+  Lalu klik Send. Jika hasil test menampilkan semua data artikel, maka pengujian berhasil
+  
+  <img width="1830" height="632" alt="10 4" src="https://github.com/user-attachments/assets/df150f5f-3a20-4d7c-aac0-d9dce47dba5a" />
+
+- menampilkan/memilih data secara spesifik
+- lakukan hal yang sama seperti sebelumnya tetapi tambahkan ID artikel dibelakang url
+  
+  <img width="1832" height="589" alt="10 5" src="https://github.com/user-attachments/assets/638c526a-cd63-4524-ac64-93bf7c2b005a" />
+
+- Mengubah data
+- ubah method menjadi ```PUT``` kemudian masukan url artikel yang mau diubah
+
+  <img width="1831" height="724" alt="10 6" src="https://github.com/user-attachments/assets/c6ea0afe-190e-4454-8f92-9df8e57c02f0" />
+
+- Menambahkan Data
+- untuk menambahkan data gunakan kembali method ```POST```
+- Pilih tab ```Body```, lalu pilih ```x-www-form-uriencoded``` Masukkan atribut tabel pada
+  kolom ```KEY``` dan nilai data baru di kolom ```VALUE```
+
+  <img width="1831" height="781" alt="10 7" src="https://github.com/user-attachments/assets/c177e80e-3a50-48f3-89ab-358d9f024553" />
+
+- Menghapus Data
+- ganti method ke ```DELETE```, kemudian masukkan url spesifik data mana yang ingin di hapus.
+
+  <img width="1813" height="767" alt="10 8" src="https://github.com/user-attachments/assets/14bf8407-bf44-475a-aeb6-590d17275337" />
