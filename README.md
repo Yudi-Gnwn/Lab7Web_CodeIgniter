@@ -61,41 +61,41 @@
 
 - nyalakan Mysql server pada xampp, lalu masuk ke database menggunakan cmd
 - buat database di cmd dengan perintah ```CREATE DATABASE lab_ci4;```
-  
-  ![2 2](https://github.com/user-attachments/assets/5c2bb726-15bc-4c6d-bc8e-57ef7d35481e)
+
+  <img width="684" height="325" alt="2 2" src="https://github.com/user-attachments/assets/21299ff7-cb30-49e5-a3c2-812ce4b9327a" />
 
 - kemudian kita melakukan konfigurasi untuk menghubungkan ke database server pada file ```.env```
-
-  ![2 3](https://github.com/user-attachments/assets/c1247991-11b3-431e-80ad-e69342d1626e)
+  
+  <img width="546" height="287" alt="2 3" src="https://github.com/user-attachments/assets/fba6902e-8965-4017-9af3-613d88f00d58" />
 
 - buat file baru pada direktori ```app/Models``` dengan nama ```ArtikelModel.php``` untuk membuat script pengolahan data artikel
 
-  ![2 4](https://github.com/user-attachments/assets/c376f97e-c8fc-4cba-bbb0-f5b7bd3f3cde)
+  <img width="874" height="471" alt="2 4" src="https://github.com/user-attachments/assets/ed619020-9ba1-48a9-baec-355225d7e364" />
 
 - pada direktori ```app/Controler```, kita membuat Controler baru dengan nama ```Artikel.php```, dengan script dibawah:
 
-  ![2 5](https://github.com/user-attachments/assets/d4501a36-e548-4f44-a2ec-99220ee3387b)
+  <img width="940" height="498" alt="2 5" src="https://github.com/user-attachments/assets/ada1c18f-3f25-419c-b148-328191326a4b" />
 
 - pada direktori ```app/views```, buat direktori baru dengan nama ```artikel``` dan tambahkan/buat file ```index.php```
 
-  ![2 6](https://github.com/user-attachments/assets/123d115f-2cab-463c-89bd-21adaf790fc6)
+  <img width="944" height="579" alt="2 6" src="https://github.com/user-attachments/assets/d8221834-c144-4cee-92c6-d26a8ba49f1f" />
 
 - setelah sudah di setup, kita bisa menambahkan data artikel ke database untuk bisa ditampilkan pada Web
 
-  ![2 8](https://github.com/user-attachments/assets/55183bc0-8f39-4b5f-8831-09d73b571b59)
+  <img width="1889" height="212" alt="2 8" src="https://github.com/user-attachments/assets/0f6557db-3ecc-40fb-91ae-e73470409594" />
 
 - Cek browser untuk melihat perubahan
-
-  ![2 9](https://github.com/user-attachments/assets/cda49e19-d245-490e-9da7-6f4926159cbc)
+  
+  <img width="1912" height="479" alt="2 9" src="https://github.com/user-attachments/assets/6f87a8f4-7e2d-4d5d-b5e6-1bcdb9c934c8" />
 
 - Membuat tampilan Detail Artikel
 - taambahkan function ```view()``` pada ```Controller Article```
 
-  ![2 10](https://github.com/user-attachments/assets/bcb9af2f-bb55-42de-8bab-fc869c144749)
+  <img width="931" height="556" alt="2 10" src="https://github.com/user-attachments/assets/e2b494fb-066a-4ba8-8add-6af64c844500" />
 
 - Membuat View Detail, buat view baru untuk halaman detail pada ```app/views/artikel/detail.php```
 
-  ![2 11](https://github.com/user-attachments/assets/7a8356fa-b99e-44b9-a577-6acb057bad4e)
+  <img width="977" height="330" alt="2 11" src="https://github.com/user-attachments/assets/8c97d228-1a74-4084-857d-daec42f69f77" />
 
 - Membuat routing untuk artikel detail
 - buka ```app/config/Routes.php```, kemudian tambahkan
@@ -104,15 +104,15 @@
   ```
   untuk artikel detail
 
-  ![2 12](https://github.com/user-attachments/assets/43e2fe23-369c-4fa8-99e6-ff1a4adf0838)
+  <img width="1434" height="508" alt="2 12" src="https://github.com/user-attachments/assets/6ba35325-3a96-4d0a-b25c-8d37491f19df" />
 
 - Selanjutnya kita membuat menu admin dengan nama ```admin_index``` pada ```Controller Artikel``` untuk memproses CRUD
 
-  ![2 13](https://github.com/user-attachments/assets/df002890-92bf-4b99-ad14-120ce5938805)
+  <img width="1037" height="339" alt="2 13" src="https://github.com/user-attachments/assets/0789c39b-3aa7-47c7-8feb-5fb71c030b62" />
 
 - kemudian membuat view untuk tampilan admin dengan nama ```admin_index.php```
 
-  ![2 14](https://github.com/user-attachments/assets/3f70f68a-37e0-49ca-b93f-7f38823ebe83)
+  <img width="788" height="673" alt="2 14" src="https://github.com/user-attachments/assets/75ac347e-6138-4194-aa40-40ba937b77d7" />
 
 - selanjutnya tambahkan routing untuk menu admin,
   ```
@@ -124,30 +124,30 @@
   });
   ```
   kemudian akses kembali menu admin dengan ```http://localhost:8080/admin/artikel```
-
-  ![2 16](https://github.com/user-attachments/assets/f0b94c05-9dda-47c9-807c-c5897236c03f)
+  
+  <img width="1855" height="524" alt="2 16" src="https://github.com/user-attachments/assets/3695ebc9-4a12-4771-8662-f9cc84b91aca" />
 
 - selanjutnya kita bisa membuat fungsi untuk menambahkan data arikel dengan ```add()``` pada ```Controller Artikel```
 
-  ![2 17](https://github.com/user-attachments/assets/c107d6bf-11c2-41ca-a0ff-9f4f5318e387)
+  <img width="964" height="676" alt="2 17" src="https://github.com/user-attachments/assets/1f9fc673-4b9b-47c9-9afb-3eb34e7e61b5" />
 
 - buat view untuk form add dengan nama ```form_add.php```, kamudian cek kembali url nya
 
-  ![2 19](https://github.com/user-attachments/assets/a88e237d-e62a-443e-8d25-913d441d3a40)
+  <img width="1879" height="719" alt="2 19" src="https://github.com/user-attachments/assets/d6fd532b-dae9-418c-b975-9ecbd673999e" />
 
 - kemudian kita bisa membuat fungsi untuk mengubah data ```edit()``` pada ```Controller Artikel```
 
-  ![2 20](https://github.com/user-attachments/assets/dd7f4bdf-f1b6-4293-ac55-c42ca05ce762)
+  <img width="936" height="770" alt="2 20" src="https://github.com/user-attachments/assets/e08b6d7b-8d43-425f-b14b-486f03c1b227" />
 
 - Membuat View untuk form edit, buat dengan nama ```from_edit.php```
 
-  ![2 21](https://github.com/user-attachments/assets/9fa26fea-965e-48ad-898f-b3cfb136319f)
+  <img width="934" height="477" alt="2 21" src="https://github.com/user-attachments/assets/1e02dabb-7402-4271-a77f-55ab87db9ab2" />
 
-  ![2 22](https://github.com/user-attachments/assets/570e619d-85bb-4981-8457-d03e5136d358)
+  <img width="1858" height="603" alt="2 22" src="https://github.com/user-attachments/assets/82621cfb-9739-48bd-bcf6-bb8e4ae97b64" />
 
 - lanjut dengan membuat fungsi dengan nama ```delete()``` pada ```Controller Artikel``` untuk menghapus Data
 
-  ![2 23](https://github.com/user-attachments/assets/77bc5094-065d-4cd7-81d6-9c7c14712ef0)
+  <img width="689" height="271" alt="2 23" src="https://github.com/user-attachments/assets/b19b39cb-4be1-4495-a202-5e7d29c16cce" />
 
 
 # Praktikum 3
@@ -817,3 +817,5 @@
 # Praktikum 8
 
 - Menambahkan JQuery
+
+  
