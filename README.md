@@ -5,55 +5,56 @@
   htdocs/lab11_ci, kemudian ubah nama file menjadi ci4
 - kemudian cek ```http://localhost/lab11_ci/ci4/public```
   
-  ![Screenshot 2025-03-19 112837](https://github.com/user-attachments/assets/5fc81915-ec3a-4c8f-ab46-39f80f405570)
+  <img width="1366" height="478" alt="Screenshot 2025-03-19 112837" src="https://github.com/user-attachments/assets/eedc9809-bef0-4bcd-b392-108731ee0ce9" />
 
 - buka cmd kemudian masuk ke direktori project
 
-  ![Screenshot 2025-03-19 113715](https://github.com/user-attachments/assets/f9b999d1-78ae-479c-b2b1-fe99bc260f60)
+  <img width="579" height="117" alt="Screenshot 2025-03-19 113715" src="https://github.com/user-attachments/assets/949aea2e-1393-4f05-8d30-86e8e2553529" />
 
 - kemudian jalankan codeigniter dengan perintah```php spark```
 
-  ![Screenshot 2025-03-19 115600](https://github.com/user-attachments/assets/66a4c97d-22aa-4713-b622-f84d69dbc613)
+  <img width="1175" height="464" alt="Screenshot 2025-03-19 115600" src="https://github.com/user-attachments/assets/1aab5adb-ea3c-48e9-86d8-dc69b5a6e870" />
 
 - masuk ke file ```.env``` kemudian rubah variabel menjadi ```CI_ENVIRONMENT = development```
 
-  ![Screenshot 2025-03-19 115804](https://github.com/user-attachments/assets/edbea406-2c10-4897-b25c-8f4df027bb3e)
+  <img width="722" height="242" alt="Screenshot 2025-03-19 115804" src="https://github.com/user-attachments/assets/8c91c590-48da-4dad-b54e-e20ab9b61244" />
 
 - jika terjadi error, maka akan terbaca oleh codeigniter
 
-  ![Screenshot 2025-03-20 090736](https://github.com/user-attachments/assets/80acd4b2-2a46-49e1-a933-4d3d783296d7)
-
+  <img width="1604" height="547" alt="Screenshot 2025-03-20 090736" src="https://github.com/user-attachments/assets/1ce9df44-5e39-42d7-97fa-662813b7acf3" />
+  
 - kemudian membuat konfigurasi di ```app/Config/Routes.php```
 
-  ![Screenshot 2025-03-20 090057](https://github.com/user-attachments/assets/9b9ff089-79fe-463b-b343-554d8f1067dd)
+  <img width="688" height="266" alt="Screenshot 2025-03-20 090057" src="https://github.com/user-attachments/assets/5a2120ae-accb-4793-b3c9-955f11cf7432" />
 
 - buka cmd dan lakukan ```php spark route``` untuk mengecek route yang telah dibuat
-
-  ![Screenshot 2025-03-20 090113](https://github.com/user-attachments/assets/02738ed4-bbc8-4ca7-8c94-c3e15bcd147f)
+  
+  <img width="1146" height="296" alt="Screenshot 2025-03-20 090113" src="https://github.com/user-attachments/assets/7e50ae66-ad3b-4d17-9c7f-68bdab39bdbf" />
 
 - lakukan pengecekan dengan ```http/localhost:8080/about```
 
-  ![Screenshot 2025-03-20 093610](https://github.com/user-attachments/assets/02b2b0d6-22d0-42fd-bf70-2fa78fcda5d9)
+  <img width="1351" height="720" alt="Screenshot 2025-03-20 092859" src="https://github.com/user-attachments/assets/0a6ceeb0-8326-4460-80e4-38119c5f2457" />
 
 - membuat controller agar halaman ```About```  bisa terkoneksi
 - buat file baru ```Page.php``` pada direktori ```app/Controller```, kemudian masukan code berikut:
 
-  ![Screenshot 2025-07-04 165920](https://github.com/user-attachments/assets/6a9cad8b-28a6-4105-8c83-345581ed5440)
+  <img width="454" height="289" alt="Screenshot 2025-07-04 165920" src="https://github.com/user-attachments/assets/e520688b-a36a-45b3-a2c7-a88042d2f706" />
 
 - Refresh dan cek kembali web browser, maka halaman about sudah terkoneksi
 - kemudian sesuaikan halaman about sesuai dengan struktur pada modul Praktikum
+  
+  <img width="1082" height="119" alt="Screenshot 2025-03-20 093623" src="https://github.com/user-attachments/assets/cd7de949-8921-4e56-8b4e-64cb784582bf" />
 
-  ![Screenshot 2025-03-20 093623](https://github.com/user-attachments/assets/5385558a-b416-47b6-b0ab-affb08da59a9)
- 
 - Setelah menyesuaikan struktur web, kemudian tambahkan CSS
 - buat file pada direktori ```public``` dengan nama ```stye.css``` mengikuti dari praktikum sebelumnya (lab4_layout)
-
-  ![Screenshot 2025-07-04 171449](https://github.com/user-attachments/assets/c4239f70-2ae6-4219-983b-a8d259c34045)
+  
+  <img width="1059" height="408" alt="Screenshot 2025-07-04 171449" src="https://github.com/user-attachments/assets/90300549-6592-4a13-956a-26379582285d" />
 
 - pada direktori ```views``` buat folder ```template```, disana kita mengisikan file ```header.php``` dan ```footer.php``` untuk meringkas code pada ```app/views/about.php```
 - akses kembali ```http://localhost:8080/lab11_ci/ci4/public```
 
-  ![Screenshot 2025-03-20 101438](https://github.com/user-attachments/assets/58238671-b451-4aa2-8408-e200381ea575)
+  <img width="1552" height="848" alt="Screenshot 2025-03-20 101438" src="https://github.com/user-attachments/assets/38945e31-1ad3-4c16-87ba-068b7bc59142" />
+
 
 
 # Praktikum 2
