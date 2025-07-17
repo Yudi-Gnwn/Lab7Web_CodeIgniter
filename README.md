@@ -1207,3 +1207,359 @@
 - ganti method ke ```DELETE```, kemudian masukkan url spesifik data mana yang ingin di hapus.
 
   <img width="1813" height="767" alt="10 8" src="https://github.com/user-attachments/assets/14bf8407-bf44-475a-aeb6-590d17275337" />
+
+# Praktikum 11
+- Menggunakan Framework Vue.Js
+- Library Vue.Js
+  
+  ```
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  ```
+- Library Axios
+
+  ```
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  ```
+
+- Struktur Directory
+
+  ```
+  │   index.html
+  └───assets
+      ├───css
+      │       style.css
+      └───js
+              app.js
+  ```
+
+- Menampilkan Data
+- buat file ```index.html``` seperti berikut:
+  ```
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Artikel</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Toolbar Header dan Tombol Tambah -->
+  <div class="header-bar" style="display: flex; align-items: center; margin-bottom: 20px; gap: 20px;">
+    <h1 style="margin: 0;">Daftar Artikel</h1>
+  
+  </div>
+  
+      <!-- Modal Form -->
+      <div class="modal" v-if="showForm">
+        <div class="modal-content">
+          <span class="close" @click="showForm = false">&times;</span>
+          <form id="form-data" @submit.prevent="saveData">
+            <h3 id="form-title">{{ formTitle }}</h3>
+            <div><input type="text" v-model="formData.judul" placeholder="Judul" required /></div>
+            <div><textarea v-model="formData.isi" placeholder="Isi Artikel" rows="8"></textarea></div>
+            <div>
+  
+              <select v-model="formData.status">
+              <option value="0">Draft</option>
+              <option value="1">Publish</option>
+              </select>
+  
+  
+            <input type="hidden" v-model="formData.id" />
+            <button type="submit" id="btnSimpan">Simpan</button>
+            <button type="button" @click="showForm = false">Batal</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  
+    <script src="assets/js/app.js"></script>
+  </body>
+  </html>
+  ```
+
+- untuk file ```app.js```
+
+  ```
+  const { createApp } = Vue;
+
+  // tentukan lokasi API REST End Point
+  const apiUrl = "http://localhost/labci4/public";
+  
+  createApp({
+    data() {
+      return {
+        artikel: "",
+      };
+    },
+    mounted() {
+      this.loadData();
+    },
+    methods: {
+      loadData() {
+        axios
+          .get(apiUrl + "/post")
+          .then((response) => {
+            this.artikel = response.data.artikel;
+          })
+          .catch((error) => console.log(error));
+      },
+      statusText(status) {
+        if (!status) return "";
+        return status == 1 ? "Publish" : "Draft";
+      },
+    },
+  }).mount("#app");
+  ```
+
+- Membuat form tambah dan Ubah
+- sisipkan kode berikut dalam file ```index.html``` sebelum table data
+  
+  ```
+  <button id="btn-tambah" @click="tambah">Tambah Data</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Judul</th>
+        <th>Status</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(row, index) in artikel" :key="row.id">
+        <td class="center-text">{{ row.id }}</td>
+        <td>{{ row.judul }}</td>
+        <td class="center-text">{{ statusText(row.status) }}</td>
+        <td class="center-text">
+          <a href="#" @click.prevent="edit(row)">Edit</a>
+          <a href="#" @click.prevent="hapus(index, row.id)">Hapus</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  ```
+
+- dalam file ```app.js```
+  
+  ```
+  const { createApp } = Vue;
+  const apiUrl = "http://localhost/lab11_ci/ci4/public";
+  
+  createApp({
+    data() {
+      return {
+        artikel: [],
+        formData: {
+          id: null,
+          judul: "",
+          isi: "",
+          status: 0,
+        },
+        showForm: false,
+        formTitle: "Tambah Data",
+      };
+    },
+    mounted() {
+      this.loadData();
+    },
+    methods: {
+      loadData() {
+        axios
+          .get(`${apiUrl}/post`)
+          .then((response) => {
+            this.artikel = response.data.artikel;
+          })
+          .catch((error) => console.log(error));
+      },
+      statusText(status) {
+        return status == 1 ? "Publish" : "Draft";
+      },
+      tambah() {
+        this.formTitle = "Tambah Data";
+        this.formData = {
+          id: null,
+          judul: "",
+          isi: "",
+          status: 0,
+        };
+        this.showForm = true;
+      },
+      edit(data) {
+        this.formTitle = "Ubah Data";
+        this.formData = { ...data };
+        this.showForm = true;
+      },
+      hapus(index, id) {
+        if (confirm("Yakin ingin menghapus?")) {
+          axios
+            .delete(`${apiUrl}/post/${id}`)
+            .then(() => {
+              this.artikel.splice(index, 1);
+            })
+            .catch((error) => console.log(error));
+        }
+      },
+      saveData() {
+        if (this.formData.id) {
+          // UPDATE
+          axios
+            .put(`${apiUrl}/post/${this.formData.id}`, this.formData)
+            .then(() => {
+              this.loadData();
+              this.showForm = false;
+            })
+            .catch((error) => console.log(error));
+        } else {
+          // CREATE
+          axios
+            .post(`${apiUrl}/post`, this.formData)
+            .then(() => {
+              this.loadData();
+              this.showForm = false;
+            })
+            .catch((error) => console.log(error));
+        }
+      },
+    },
+  }).mount("#app");
+  ```
+
+- untuk file ```style.css```
+
+  ```
+  #app {
+    margin: 0 auto;
+    width: 900px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  #btn-tambah {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #3152d6;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+  }
+  
+  th {
+    padding: 12px;
+    background-color: #5778ff;
+    color: white;
+    text-align: center;
+  }
+  
+  td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .center-text {
+    text-align: center;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f4f7ff;
+  }
+  
+  td a {
+    margin: 0 8px;
+    text-decoration: none;
+    color: #3152d6;
+    font-weight: bold;
+  }
+  
+  td a:hover {
+    text-decoration: underline;
+  }
+  
+  .modal {
+    display: block;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    width: 600px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    position: relative;
+  }
+  
+  .close {
+    position: absolute;
+    right: 16px;
+    top: 10px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  #form-data input,
+  #form-data textarea,
+  #form-data select {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  #form-data button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  #btnSimpan {
+    background-color: #3152d6;
+    color: #fff;
+    border: none;
+  }
+  
+  .header-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .header-bar h1 {
+    margin: 0;
+  }
+  ```
+
+- Output yang dihaslkan:
+  
+  <img width="1789" height="707" alt="11 5" src="https://github.com/user-attachments/assets/8c15a6a6-0f57-4c9d-9e6d-cbdb090268a7" />
+
+  
